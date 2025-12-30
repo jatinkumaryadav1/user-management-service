@@ -1,5 +1,7 @@
 package com.userManagement.security;
 
+import com.userManagement.RoleEnum;
+import com.userManagement.entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +25,14 @@ public class JwtUtil {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
+
     public String generateToken(String username, Map<String, Object> claims) {
+
+//        User user = userRepository.findByUsername(username);
+//        RoleEnum role = user.getRoles(); // Get the actual role from DB
+//
+//        // Add the role to the claims
+//        claims.put("role", role.name());
 
         return Jwts.builder()
                 .setClaims(claims)

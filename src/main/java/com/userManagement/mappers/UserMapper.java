@@ -1,5 +1,6 @@
 package com.userManagement.mappers;
 
+import com.userManagement.RoleEnum;
 import com.userManagement.dtos.UserDto;
 import com.userManagement.entity.User;
 
@@ -21,9 +22,7 @@ public class UserMapper {
         dto.setFullName(user.getFullName());
         dto.setEmail(user.getEmail());
 
-        dto.setRoles(user.getRoles() != null
-                ? new ArrayList<>(user.getRoles())
-                : null);
+        dto.setRoles(user.getRoles());
 
         return dto;
     }
@@ -41,9 +40,7 @@ public class UserMapper {
         user.setFullName(dto.getFullName());
         user.setEmail(dto.getEmail());
 
-        user.setRoles(dto.getRoles() != null
-                ? new ArrayList<>(dto.getRoles())
-                : null);
+        user.setRoles(dto.getRoles());
 
         return user;
     }

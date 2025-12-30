@@ -1,5 +1,6 @@
 package com.userManagement.security;
 
+import com.userManagement.RoleEnum;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,14 +47,16 @@ public class JwtFilter extends OncePerRequestFilter {
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null){
 
             if (jwtUtil.isTokenValid(token, username)){
-                String role = "USER";
+                String role = RoleEnum.USER.name();
 
                 try{
                     Object claimedRole = jwtUtil.extractClaims(token, claims -> claims.get("role"));
                     if (claimedRole != null){
-                        role = claimedRole.toString();
+                        role = RoleEnum.valueOf(claimedRole.toString()).name();
                     }
                 } catch (Exception e){
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    return;
                 }
 
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
@@ -62,7 +65,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
-                // can we return or throw an error here
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
             }
         }
         filterChain.doFilter(request, response);

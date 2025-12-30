@@ -1,5 +1,7 @@
 package com.userManagement.dtos;
 
+import com.userManagement.RoleEnum;
+
 import java.util.List;
 
 public class UserDto {
@@ -14,7 +16,7 @@ public class UserDto {
 
     private String email;
 
-    private List<String> roles;
+    private RoleEnum roles;
 
     public Long getId() {
         return id;
@@ -56,11 +58,11 @@ public class UserDto {
         this.email = email;
     }
 
-    public List<String> getRoles() {
+    public RoleEnum getRoles() {
         return roles;
     }
 
-    public void setRoles(List<String> roles) {
+    public void setRoles(RoleEnum roles) {
         this.roles = roles;
     }
 

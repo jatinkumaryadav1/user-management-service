@@ -43,7 +43,7 @@ public class AuthController {
             return ResponseEntity.ok(loginResponse);
         }
 
-        Map<String, Object > claims = Map.of("role", "USER");
+        Map<String, Object > claims = Map.of("role", user.getRoles());
         String token = jwtUtil.generateToken(user.getUsername(), claims);
 
         LoginResponse loginResponse = new LoginResponse();
@@ -61,7 +61,7 @@ public class AuthController {
         try {
             UserDto userDto = userService.verifyUser(authRequest);
 
-            Map<String, Object> claims = Map.of("role", "USER");
+            Map<String, Object> claims = Map.of("role", userDto.getRoles());
             String token = jwtUtil.generateToken(userDto.getUsername(), claims);
 
             LoginResponse response = new LoginResponse();

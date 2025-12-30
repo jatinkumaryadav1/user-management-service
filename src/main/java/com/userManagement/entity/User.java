@@ -1,5 +1,6 @@
 package com.userManagement.entity;
 
+import com.userManagement.RoleEnum;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class User {
 
     @Column(unique = true, nullable = false)
     private String email;
-    private List<String> roles;
+    private RoleEnum roles;
 
     @Version
     private Long version;
@@ -68,11 +69,11 @@ public class User {
         this.email = email;
     }
 
-    public List<String> getRoles() {
+    public RoleEnum getRoles() {
         return roles;
     }
 
-    public void setRoles(List<String> roles) {
+    public void setRoles(RoleEnum roles) {
         this.roles = roles;
     }
 
@@ -80,7 +81,7 @@ public class User {
 
     }
 
-    public User(Long id, String username, String password, String fullName, String email, List<String> roles) {
+    public User(Long id, String username, String password, String fullName, String email, RoleEnum roles) {
         this.id = id;
         this.username = username;
         this.password = password;

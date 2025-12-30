@@ -1,8 +1,12 @@
 package com.userManagement.controller;
 
+import com.userManagement.RoleEnum;
+import com.userManagement.dtos.InformationResponseBody;
 import com.userManagement.dtos.UserDto;
 import com.userManagement.exception.UserNotFoundException;
 import com.userManagement.service.UserService;
+import org.springframework.context.annotation.Role;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -68,4 +72,19 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
+
+
+    @GetMapping("/adminInformation")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<InformationResponseBody> adminLevelInformation(){
+
+        InformationResponseBody information = new InformationResponseBody();
+        information.setStatus("SUCCESS");
+        information.setMessage("ADMIN LEVEL API ENDPOINT ACCESSED SUCCESSFULLY");
+        information.setApplicationName("USER MANAGEMENT SERVICE");
+        information.setApplicationDescription("APPLICATION DESIGNED FOR MANAGING USERS");
+
+        return ResponseEntity.ok(information);
+    }
+
 }
