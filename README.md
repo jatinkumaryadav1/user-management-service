@@ -92,26 +92,38 @@ DELETE	/api/users/{id}
 Example:
 http://localhost:8336/api/users/3
 
-Issue Solved : Role-Based Access Control
+Role-Based Access Control (RBAC) and JWT Authentication
+Issue: Unauthorized Access to Admin Routes
 
-We use role-based access control (RBAC) to determine which user can access certain routes. In this system, roles are encoded in the JWT token under the role claim.
+There was an issue where admin-only routes (/api/admin/**) were being accessed with a user token. This happened because the role was hardcoded as USER during registration and login, regardless of the user's actual role.
 
-And the methods which have access only for admin, is also executed with user token, this issue happens because
-of two things
-1, Static claim set at the time of registration and login ("In auth controller method")
-File : AuthController
+Fix:
+
+The role is now dynamically assigned based on the user's actual role. This ensures:
+
+Users with ADMIN role can access admin routes (e.g., /api/admin/**).
+
+Users with USER role can access user-specific routes (e.g., /api/users/**).
+
+Code Changes:
 
 Previous:
+
 Map<String, Object> claims = Map.of("role", "USER");
 String token = jwtUtil.generateToken(userDto.getUsername(), claims);
 
-Now:
+
+Updated:
+
 Map<String, Object> claims = Map.of("role", userDto.getRoles());
 String token = jwtUtil.generateToken(userDto.getUsername(), claims);
 
 Example Roles:
-ADMIN: Users with the ADMIN role can access sensitive endpoints like /api/admin/**.
-USER: Regular users with the USER role can access user-specific endpoints (like /api/users/**).
+
+ADMIN: Access to /api/admin/** routes.
+USER: Access to /api/users/** routes.
+
+This update ensures that only users with the appropriate role can access protected resources.
 
 Future Improvements
 
