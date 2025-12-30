@@ -92,6 +92,27 @@ DELETE	/api/users/{id}
 Example:
 http://localhost:8336/api/users/3
 
+Issue Solved : Role-Based Access Control
+
+We use role-based access control (RBAC) to determine which user can access certain routes. In this system, roles are encoded in the JWT token under the role claim.
+
+And the methods which have access only for admin, is also executed with user token, this issue happens because
+of two things
+1, Static claim set at the time of registration and login ("In auth controller method")
+File : AuthController
+
+Previous:
+Map<String, Object> claims = Map.of("role", "USER");
+String token = jwtUtil.generateToken(userDto.getUsername(), claims);
+
+Now:
+Map<String, Object> claims = Map.of("role", userDto.getRoles());
+String token = jwtUtil.generateToken(userDto.getUsername(), claims);
+
+Example Roles:
+ADMIN: Users with the ADMIN role can access sensitive endpoints like /api/admin/**.
+USER: Regular users with the USER role can access user-specific endpoints (like /api/users/**).
+
 Future Improvements
 
 Thread safety & concurrency handling
